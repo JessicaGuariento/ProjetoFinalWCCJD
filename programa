@@ -1,0 +1,67 @@
+fCalcularConversao = (peso, medidaEntrada, medidaSaida) => {
+    const kiloLibra = 2.20462;
+    const kiloOnca = 35.274;
+    const libraKilo = 0.453592;
+    const libraOnca = 16;
+    const oncaKilo = 0.0283495;
+    const oncaLibra = 0.0625;
+
+    let resultado = 0;
+    if ((medidaEntrada === 'kilo') && (medidaSaida === 'libra')) {
+        resultado = peso * kiloLibra;
+        return resultado;
+        } else {
+        if ((medidaEntrada === 'kilo') && (medidaSaida === 'onça')) {
+            resultado = peso * kiloOnca;
+            return resultado;
+            } else {
+            if ((medidaEntrada === 'libra') && (medidaSaida === 'kilo')) {
+                resultado = peso * libraKilo;
+                return resultado;
+                } else {
+                if ((medidaEntrada === 'libra') && (medidaSaida === 'onça')) {
+                    resultado = peso * libraOnca;
+                    return resultado;
+                    } else {
+                    if ((medidaEntrada === 'onça') && (medidaSaida === 'kilo')) {
+                        resultado = peso * oncaKilo;
+                        return resultado;
+                        } else {
+                        if ((medidaEntrada === 'onça') && (medidaSaida === 'libra')) {
+                            resultado = peso * oncaLibra;
+                            return resultado;
+                            } else {
+                            if (medidaEntrada === medidaSaida) {
+                                return context.res.status(400).send("Foram informados os mesmos critérios de entrada e saída, não tendo o que ser convertido");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+module.exports = async function (context, req) {
+    let peso = Number(req.query.peso);
+    let medidaEntrada = String(req.query.medidaE);
+    let medidaSaida = String(req.query.medidaS);
+
+    if (!String(medidaEntrada) || !String(medidaSaida) || !Number(peso)) {
+        return context.res.status(400).send('Formato de dados incorreto, o campo medidaEntrada e medidaSaida aceitam apenas as opções: kilo, libra ou onça. E o campo peso aceita apenas números');
+    };
+
+    let resultadoConversao = fCalcularConversao(peso, medidaEntrada, medidaSaida);
+
+
+    context.res.json({
+
+        peso: peso,
+        medidaEntrada: medidaEntrada,
+        medidaSaida: medidaSaida,
+        resultadoConversao: resultadoConversao
+
+    });
+
+};
