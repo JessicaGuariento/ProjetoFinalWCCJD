@@ -10,35 +10,29 @@ fCalcularConversao = (peso, medidaEntrada, medidaSaida) => {
     if ((medidaEntrada === 'kilo') && (medidaSaida === 'libra')) {
         resultado = peso * kiloLibra;
         return resultado;
-        } else {
-        if ((medidaEntrada === 'kilo') && (medidaSaida === 'onça')) {
-            resultado = peso * kiloOnca;
-            return resultado;
-            } else {
-            if ((medidaEntrada === 'libra') && (medidaSaida === 'kilo')) {
-                resultado = peso * libraKilo;
-                return resultado;
-                } else {
-                if ((medidaEntrada === 'libra') && (medidaSaida === 'onça')) {
-                    resultado = peso * libraOnca;
-                    return resultado;
-                    } else {
-                    if ((medidaEntrada === 'onça') && (medidaSaida === 'kilo')) {
-                        resultado = peso * oncaKilo;
-                        return resultado;
-                        } else {
-                        if ((medidaEntrada === 'onça') && (medidaSaida === 'libra')) {
-                            resultado = peso * oncaLibra;
-                            return resultado;
-                            } else {
-                            if (medidaEntrada === medidaSaida) {
-                                return context.res.status(400).send("Foram informados os mesmos critérios de entrada e saída, não tendo o que ser convertido");
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        
+    } else if ((medidaEntrada === 'kilo') && (medidaSaida === 'onça')) {
+        resultado = peso * kiloOnca;
+        return resultado;
+
+    } else if ((medidaEntrada === 'libra') && (medidaSaida === 'kilo')) {
+        resultado = peso * libraKilo;
+        return resultado;
+
+    } else if ((medidaEntrada === 'libra') && (medidaSaida === 'onça')) {
+        resultado = peso * libraOnca;
+        return resultado;
+
+    } else if ((medidaEntrada === 'onça') && (medidaSaida === 'kilo')) {
+        resultado = peso * oncaKilo;
+        return resultado;
+
+    } else if ((medidaEntrada === 'onça') && (medidaSaida === 'libra')) {
+        resultado = peso * oncaLibra;
+        return resultado;
+    
+    } else if (medidaEntrada === medidaSaida) {
+        return context.res.status(400).send("Foram informados os mesmos critérios de entrada e saída, não tendo o que ser convertido");
     }
 };
 
@@ -50,7 +44,9 @@ module.exports = async function (context, req) {
 
     if (!String(medidaEntrada) || !String(medidaSaida) || !Number(peso)) {
         return context.res.status(400).send('Formato de dados incorreto, o campo medidaEntrada e medidaSaida aceitam apenas as opções: kilo, libra ou onça. E o campo peso aceita apenas números');
-    };
+    } else if (medidaEntrada === medidaSaida) {
+        return context.res.status(400).send("Foram informados os mesmos critérios de entrada e saída, não tendo o que ser convertido");
+    }; // A variavel context e req só conseguimos utilizar dentro desta funcao.
 
     let resultadoConversao = fCalcularConversao(peso, medidaEntrada, medidaSaida);
 
